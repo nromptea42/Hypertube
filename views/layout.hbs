@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Oui</title>
+    <link rel="stylesheet" href="/public/stylesheets/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css">
+    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+    <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js" ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js"></script>
+
+</head>
+<div class="navbar-fixed">
+    <nav>
+        <div class="nav-wrapper">
+            <a href="/" class="left title">Oui</a>
+            <ul class="right">
+                <li><a href="/logout">Logout</a></li>
+            </ul>
+        </div>
+        <img class="burger" src="/public/Burger-Free-Download-PNG.png">
+    </nav>
+</div>
+
+<body  class="padding">
+<div class="container">
+    {{{ body }}}
+</div>
+
+<footer class="page-footer foot">
+    <div class="footer-copyright">
+        <div class="container">
+            © 2017 nromptea@student.42.fr
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>
+
+<script src="/socket.io/socket.io.js"></script>
+
+<script>
+
+    handleMyBurger();
+    handleResize();
+
+
+    function handleMyBurger () {
+        $('.burger').bind("click", function () {
+           if ($('nav').height() == 56) {
+               $('nav').css ({'height': '170px'});
+           }
+           else
+               $('nav').css ({'height': '56px'});
+        });
+    }
+
+    function handleResize () {
+        $(window).resize(function() {
+            if ($(window).width() > 643)
+                $('nav').css ({'height': '56px'});
+        });
+    }
+
+</script>

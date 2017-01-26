@@ -1,0 +1,64 @@
+.photo {
+    width: 400px;
+    height: auto;
+}
+
+.padding {
+    padding-bottom: 100px;
+}
+
+.oui {
+    position: relative;
+}
+
+#messages {
+    height: 500px;
+    overflow-y: scroll;
+}
+
+#messages > p {
+    display: block;
+    width: inherit;
+    height: auto;
+    overflow: hidden;
+}
+
+.match_img {
+    max-width: 150px;
+}
+
+.title {
+    font-size: 3em;
+}
+
+.del_tags {
+    width: 13px;
+    height: auto;
+}
+
+.foot {
+    position: fixed;
+    bottom: 0;
+    width: 100%
+}
+
+.burger {
+    height: 28px;
+    display: none;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+}
+
+
+@media(max-width: 643px) {
+    nav {  
+        height: 56px;
+        overflow: hidden;
+        transition: 0.3s;
+    }
+    
+    .burger {
+        display: initial;
+    }
+}
