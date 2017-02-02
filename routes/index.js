@@ -14,7 +14,10 @@ var torrentStream = require('torrent-stream');
 
 
 router.get('/', function(req, res, next) {
-    var engine = torrentStream('magnet:?xt=urn:btih:27425d01a17fcd2a6f113cff00ae3eeb45fed022&dn=Arrival+2016+WEB-DL+XviD+AC3-EVO&tr=http%3A%2F%2Ftracker.trackerfix.com%3A80%2Fannounce&tr=udp%3A%2F%2F9.rarbg.me%3A2710&tr=udp%3A%2F%2F9.rarbg.to%3A2710');
+    var engine = torrentStream('magnet:?xt=urn:btih:1AD001509A762AD98DF9B4353EB5E4775E28F244&dn=American+Pastoral+%282016%29+%5B720p%5D+%5BYTS.AG%5D&tr=udp%3A%2F%2Fglotorrents.pw%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A80&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969&tr=udp%3A%2F%2Fp4p.arenabg.ch%3A1337&tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337', {
+        tmp: '/Volumes/Storage/goinfre/nromptea',
+        path: '/Volumes/Storage/goinfre/nromptea/film'
+    });
 
     engine.on('ready', function() {
         engine.files.forEach(function(file) {
@@ -23,6 +26,8 @@ router.get('/', function(req, res, next) {
             // stream is readable stream to containing the file content
         });
     });
+
+    engine.on('download', [piece-index])
 
     engine.on('idle', function () {
         console.log('finished !');
