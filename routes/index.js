@@ -27,8 +27,6 @@ router.get('/', function(req, res, next) {
         });
     });
 
-    engine.on('download', [piece-index])
-
     engine.on('idle', function () {
         console.log('finished !');
     });
