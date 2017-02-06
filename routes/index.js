@@ -35,7 +35,7 @@ router.get('/', function(req, res, next) {
 
     engine.on('ready', function() {
         engine.files.forEach(function(file) {
-            // console.log(file.path);
+            console.log(file.path);
             console.log('filename:', file.name);
             var stream = file.createReadStream();
             // stream is readable stream to containing the file content
