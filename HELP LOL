@@ -21,3 +21,10 @@ dans LIEN.js : router.get('LIEN', function(req, res, next) {
                });
 
 http://maps.googleapis.com/maps/api/geocode/json?address=93300
+
+
+Salut a tous, nous cherchons une ou deux personnes pour faire hypertube. J'ai deja commence a travailler sur la partie
+video et je pense que je suis proche de pouvoir streamer une video. Il reste forcement plein de trucs a faire par la
+suite mais c'est deja un debut. Mon binome travaille sur le front en React. Pour l'instant nous sommes parti sur du
+back en node js avec mongo comme db et un front en React. Si vous etes interesse vous pouvez venir nous voir, on est la
+tous les jours. nromptea et mbinet.
