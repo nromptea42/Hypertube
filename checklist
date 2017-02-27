@@ -1,0 +1,24 @@
+Header/footer
+Responsive
+
+Partie utilisateur :
+
+~ Inscription avec : mail - nom - photo - mdp
+~ Connection avec omniauth : 42 + Autre chose /!\
+~ Langue du site : anglais - francais /!\
+~ Modification profil
+
+Partie bibliotheque :
+
+~ Champ de recherche sur deux sources differentes (deux api du coup je pense) avec retour
+des resultats sous forme de miniatures. /!\
+~ Miniatures triées par nom SI une recherche a ete faite.
+~ Si pas de recherche, afficher au choix.
+~ Miniature = image, annee de production, note imdb
+~ Differencier les videos vues et non vues.
+~ Pagination de la liste /!\
+~ Liste triable et filtrable tout ca tout ca
+
+Partie streaming :
+
+~ Afficher le player ainsi que

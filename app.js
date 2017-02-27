@@ -5,7 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var jade = require('jade');
-// var hbs = require('express-handlebars');
+var hbs = require('express-handlebars');
 var url = "mongodb://localhost:27017/test";
 var mongo = require('mongodb').MongoClient;
 var objectId = require('mongodb').ObjectID;
@@ -22,6 +22,7 @@ var escape = require('escape-html');
 // view engine setup
 // app.engine('hbs', hbs({extname: 'hbs', defaultLayout: 'layout', layoutsDir: __dirname+ '/views'}));
 app.set('views', path.join(__dirname, 'views'));
+// app.set('view engine', 'hbs');
 app.set('view engine', 'jade');
 
 app.use(logger('dev'));
