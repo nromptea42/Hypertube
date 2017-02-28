@@ -21,4 +21,15 @@ des resultats sous forme de miniatures. /!\
 
 Partie streaming :
 
-~ Afficher le player ainsi que
+~ Afficher le player ainsi que ses informations IMDB.
+~ Pouvoir laisser un commentaire et voir ceux des autres. Mettre un lien sur le nom des gens vers leur profil.
+~ Streamer le film.
+~ Une fois telecharge completement, le film est sauvegarde sur le serveur et efface au bout de 30 jours de non lecture.
+~ Afficher les sous-titre dans le langue de l'utilisateur.
+~ Convertir les mkv en mp4.
+
+Bonus :
+~ Omniauth en plus (Twitter, Instagram, Google)
+~ Gerer differentes qualitées de videos.
+~ API RESTful (Maxime l'a fait pour son match un peu)
+~ A voir ..

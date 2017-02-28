@@ -23,11 +23,16 @@ var jade = require('jade');
 // });
 
 router.get('*', function (req, res, next) {
+    console.log(req.url);
     if (req.url != "/Guardians.of.the.Galaxy.2014.1080p.BluRay.x264.YIFY.mp4") {
-        var rpath = __dirname + '/views/index.jade';
+        console.log("JE SUIS PASSE LA");
+        var rpath = __dirname + '/../views/index.jade';
         fs.readFile(rpath, 'utf8', function (err, str) {
-            var fn = jade.compile(str, {filename: rpath, pretty: true});
-            res.writeHead(200, {"Content-Type": "text/html"});
+            if (err) {
+                throw err;
+            }
+            var fn = jade.compile(str);
+            res.writeHead(200, { "Content-Type": "text/html" });
             res.write(fn());
             res.end();
         });
@@ -35,7 +40,7 @@ router.get('*', function (req, res, next) {
     else {
         engineGo(23).delay(8000).then(function (result) {
             console.log('engineGo has happened');
-            var filer = '/Volumes/Storage/goinfre/nromptea/Guardians.of.the.Galaxy.2014.720p.BluRay.x264.YIFY.mp4';
+            var filer = '/Volumes/Storage/goinfre/nromptea/Moana.2016.720p.BluRay.x264-[YTS.AG].mp4';
             fs.stat(filer, function (err, stats) {
                 if (err) {
                     console.log(err);
@@ -66,7 +71,6 @@ router.get('*', function (req, res, next) {
                     "Content-Length": chunksize,
                     "Content-Type": "video/mp4"
                 });
-                //fconsole.log("about to write");
                 if (start < end) {
                     var stream = fs.createReadStream(filer, {start: start, end: end});
                     pump(stream, res);
@@ -82,7 +86,7 @@ let engineGo = function (id) {
     return new Promise(function (resolve, reject) {
         console.log("entering engineGo");
         if (runningEngines[id] == undefined) {
-            var engine = torrentStream('magnet:?xt=urn:btih:836D2E8C6350E4CE3800E812B60DE53A63FEB027&dn=Guardians+of+the+Galaxy+%282014%29+%5B720p%5D+%5BYTS.AG%5D&tr=udp%3A%2F%2Fglotorrents.pw%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A80&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969&tr=udp%3A%2F%2Fp4p.arenabg.ch%3A1337&tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337', {
+            var engine = torrentStream('magnet:?xt=urn:btih:749E77BBFEBD97E689C132E3B663BB89425476DC&dn=Moana+%282016%29+%5B720p%5D+%5BYTS.AG%5D&tr=udp%3A%2F%2Fglotorrents.pw%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A80&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969&tr=udp%3A%2F%2Fp4p.arenabg.ch%3A1337&tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337', {
                 tmp: '/Volumes/Storage/goinfre/nromptea',
                 path: '/Volumes/Storage/goinfre/nromptea/film'
             });
