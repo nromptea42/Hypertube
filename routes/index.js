@@ -17,14 +17,13 @@ var torrentStream = require('torrent-stream');
 var pump = require('pump');
 var fs = require('fs');
 var jade = require('jade');
-var parseRange = require('range-parser');
 
 // router.get('/', function(req, res, next) {
 //     res.render('index', {base_url: 'http://localhost:8000'});
 // });
 
 router.get('*', function (req, res, next) {
-    // console.log(req.url);
+    console.log(req.url);
     if (req.url != "/Guardians.of.the.Galaxy.2014.1080p.BluRay.x264.YIFY.mp4") {
         console.log("JE SUIS PASSE LA");
         var rpath = __dirname + '/../views/index.jade';
@@ -51,33 +50,30 @@ router.get('*', function (req, res, next) {
                     }
                     res.end(err);
                 }
-                var range = parseRange(stats.size, req.headers.range);
-                console.log(req.headers.range);
+                var range = req.headers.range;
+                // console.log("range is " + range);
                 if (!range) {
                     console.log("no range");
                     // 416 Wrong range
                     return res.sendStatus(416);
                 }
+                var positions = range.replace(/bytes=/, "").split("-");
+                var start = parseInt(positions[0], 10);
                 var total = stats.size;
-                if (range.type === 'bytes') {
-                    // the ranges
-                    range.forEach(function (r) {
-                        console.log(r);
-                        var start = r.start;
-                        var end = r.end;
-                        var chunksize = (end - start) + 1;
-                        console.log(start + "  " + end);
+                var end = positions[1] ? parseInt(positions[1], 10) : total - 1;
+                var chunksize = (end - start) + 1;
+                // console.log(start + "  " + end);
 
-                        res.writeHead(206, {
-                            "Content-Range": "bytes " + start + "-" + end + "/" + total,
-                            "Accept-Ranges": "bytes",
-                            'Connection': 'keep-alive',
-                            "Content-Length": chunksize,
-                            "Content-Type": "video/mp4"
-                        });
-                        var stream = fs.createReadStream(filer, {start: start, end: end});
-                        pump(stream, res);
-                    })
+                res.writeHead(206, {
+                    "Content-Range": "bytes " + start + "-" + end + "/" + total,
+                    "Accept-Ranges": "bytes",
+                    'Connection': 'keep-alive',
+                    "Content-Length": chunksize,
+                    "Content-Type": "video/mp4"
+                });
+                if (start < end) {
+                    var stream = fs.createReadStream(filer, {start: start, end: end});
+                    pump(stream, res);
                 }
             });
         })
@@ -106,8 +102,7 @@ let engineGo = function (id) {
                         pump(stream, writable);
                         engine.on('download', function () {
                             // console.log(file.name);
-                            if (Number(engine.swarm.downloaded / file.length * 100) % 10 < 1)
-                                console.log(engine.swarm.downloaded / file.length * 100 + "%");
+                            console.log(engine.swarm.downloaded / file.length * 100 + "%");
                             resolve(file);
                         });
                     }
