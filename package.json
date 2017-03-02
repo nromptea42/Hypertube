@@ -25,6 +25,7 @@
     "range-parser": "^1.2.0",
     "serve-favicon": "~2.3.0",
     "socket.io": "^1.7.2",
-    "string": "^3.3.3"
+    "string": "^3.3.3",
+    "video.js": "^5.16.0"
   }
 }

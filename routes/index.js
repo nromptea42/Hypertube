@@ -17,6 +17,7 @@ var torrentStream = require('torrent-stream');
 var pump = require('pump');
 var fs = require('fs');
 var jade = require('jade');
+var parseRange = require('range-parser')
 
 // router.get('/', function(req, res, next) {
 //     res.render('index', {base_url: 'http://localhost:8000'});
@@ -40,7 +41,7 @@ router.get('*', function (req, res, next) {
     else {
         engineGo(23).delay(8000).then(function (result) {
             console.log('engineGo has happened');
-            var filer = '/Volumes/Storage/goinfre/nromptea/Moana.2016.720p.BluRay.x264-[YTS.AG].mp4';
+            var filer = '/Volumes/Storage/goinfre/nromptea/Big.Hero.6.2014.720p.BluRay.x264.YIFY.mp4';
             fs.stat(filer, function (err, stats) {
                 if (err) {
                     console.log(err);
@@ -50,30 +51,34 @@ router.get('*', function (req, res, next) {
                     }
                     res.end(err);
                 }
-                var range = req.headers.range;
+                var range = parseRange(stats.size, req.headers.range);
                 // console.log("range is " + range);
                 if (!range) {
                     console.log("no range");
                     // 416 Wrong range
                     return res.sendStatus(416);
                 }
-                var positions = range.replace(/bytes=/, "").split("-");
-                var start = parseInt(positions[0], 10);
-                var total = stats.size;
-                var end = positions[1] ? parseInt(positions[1], 10) : total - 1;
-                var chunksize = (end - start) + 1;
-                // console.log(start + "  " + end);
+                if (range.type === 'bytes') {
+                    // the ranges
+                    range.forEach(function (r) {
+                        // var positions = range.replace(/bytes=/, "").split("-");
+                        var start = r.start;
+                        var total = stats.size;
+                        var end = r.end;
+                        var chunksize = (end - start);
+                        console.log(start + "  " + end);
 
-                res.writeHead(206, {
-                    "Content-Range": "bytes " + start + "-" + end + "/" + total,
-                    "Accept-Ranges": "bytes",
-                    'Connection': 'keep-alive',
-                    "Content-Length": chunksize,
-                    "Content-Type": "video/mp4"
-                });
-                if (start < end) {
-                    var stream = fs.createReadStream(filer, {start: start, end: end});
-                    pump(stream, res);
+                        res.writeHead(206, {
+                            "Content-Range": "bytes " + start + "-" + end + "/" + total,
+                            "Accept-Ranges": "bytes",
+                            'Connection': 'keep-alive',
+                            "Content-Length": chunksize,
+                            "Content-Type": "video/mp4"
+                        });
+                        var stream = fs.createReadStream(filer, {start: start, end: end});
+                        console.log("PUMP INCOMING");
+                        pump(stream, res);
+                    })
                 }
             });
         })
@@ -86,7 +91,7 @@ let engineGo = function (id) {
     return new Promise(function (resolve, reject) {
         console.log("entering engineGo");
         if (runningEngines[id] == undefined) {
-            var engine = torrentStream('magnet:?xt=urn:btih:749E77BBFEBD97E689C132E3B663BB89425476DC&dn=Moana+%282016%29+%5B720p%5D+%5BYTS.AG%5D&tr=udp%3A%2F%2Fglotorrents.pw%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A80&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969&tr=udp%3A%2F%2Fp4p.arenabg.ch%3A1337&tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337', {
+            var engine = torrentStream('magnet:?xt=urn:btih:BB43CF1DC5B200BA37679DB96375A8190D933C2E&dn=Big+Hero+6+%282014%29+%5B720p%5D+%5BYTS.AG%5D&tr=udp%3A%2F%2Fglotorrents.pw%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A80&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969&tr=udp%3A%2F%2Fp4p.arenabg.ch%3A1337&tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337', {
                 tmp: '/Volumes/Storage/goinfre/nromptea',
                 path: '/Volumes/Storage/goinfre/nromptea/film'
             });
@@ -97,7 +102,7 @@ let engineGo = function (id) {
                         // console.log('filename:', file.name);
                         var stream = file.createReadStream();
                         var writable = fs.createWriteStream('public/videos/' + file.name);
-                        // console.log("about to write file");
+                        console.log("about to write file");
                         runningEngines[id] = engine;
                         pump(stream, writable);
                         engine.on('download', function () {
