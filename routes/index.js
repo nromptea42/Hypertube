@@ -17,6 +17,14 @@ var fs = require('fs');
 var jade = require('jade');
 var srt2vtt = require('srt-to-vtt');
 
+const OS = require('opensubtitles-api');
+const OpenSubtitles = new OS({
+    useragent:'OSTestUserAgentTemp',
+    username: 'Hypertube',
+    password: 'dotef',
+    ssl: true
+});
+
 const path = require('path');
 const parseRange = require('range-parser');
 const engine = torrentStream('magnet:?xt=urn:btih:D45024BCD32E1B714E558A84C4538AB62EE04DC7&dn=2%20Fast%202%20Furious&tr=udp://tracker.coppersurfer.tk:6969&tr=udp://tracker.openbittorrent.com:80', {
@@ -40,9 +48,9 @@ router.get('*', function(req, res, next) {
         res.setHeader('Content-Type', 'text/html');
         if (req.method !== 'GET') return res.end();
 
-        fs.createReadStream('./public/subti.srt')
+        fs.createReadStream('./public/')
             .pipe(srt2vtt())
-            .pipe(fs.createWriteStream('./public/new_sub.vtt'))
+            .pipe(fs.createWriteStream('./public/new_sub.vtt'));
 
         console.log("finished transform");
 

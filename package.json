@@ -20,6 +20,7 @@
     "multer": "^1.2.0",
     "node-captions": "^0.4.6",
     "nodemon": "^1.11.0",
+    "opensubtitles-api": "^4.0.0-rc1",
     "path": "^0.12.7",
     "promise": "^7.1.1",
     "pump": "^1.0.2",
