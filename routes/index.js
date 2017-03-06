@@ -12,15 +12,17 @@ var http = require('http');
 var Promise = require("bluebird");
 
 var torrentStream = require('torrent-stream');
-
-
 var pump = require('pump');
 var fs = require('fs');
 var jade = require('jade');
+var srt2vtt = require('srt-to-vtt');
 
 const path = require('path');
 const parseRange = require('range-parser');
-const engine = torrentStream('magnet:?xt=urn:btih:BB43CF1DC5B200BA37679DB96375A8190D933C2E&dn=Big+Hero+6+%282014%29+%5B720p%5D+%5BYTS.AG%5D&tr=udp%3A%2F%2Fglotorrents.pw%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A80&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969&tr=udp%3A%2F%2Fp4p.arenabg.ch%3A1337&tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337');
+const engine = torrentStream('magnet:?xt=urn:btih:D45024BCD32E1B714E558A84C4538AB62EE04DC7&dn=2%20Fast%202%20Furious&tr=udp://tracker.coppersurfer.tk:6969&tr=udp://tracker.openbittorrent.com:80', {
+    tmp: '/Volumes/Storage/goinfre/nromptea',
+    path: '/Volumes/Storage/goinfre/nromptea/film'
+});
 const getTorrentFile = new Promise(function (resolve, reject) {
     engine.on('ready', function() {
         engine.files.forEach(function (file, idx) {
@@ -37,10 +39,17 @@ router.get('*', function(req, res, next) {
     if (req.url != '/Guardians.of.the.Galaxy.2014.1080p.BluRay.x264.YIFY.mp4') {
         res.setHeader('Content-Type', 'text/html');
         if (req.method !== 'GET') return res.end();
+
+        fs.createReadStream('./public/subti.srt')
+            .pipe(srt2vtt())
+            .pipe(fs.createWriteStream('./public/new_sub.vtt'))
+
+        console.log("finished transform");
+
         var rpath = __dirname + '/../views/index.jade';
         fs.readFile(rpath, 'utf8', function (err, str) {
             var fn = jade.compile(str, { filename: rpath, pretty: true});
-            res.end(fn());
+            res.end(fn({sub: "./public/videos/new_sub.vtt"}));
         });
     } else {
         res.setHeader('Accept-Ranges', 'bytes');
@@ -48,6 +57,7 @@ router.get('*', function(req, res, next) {
             res.setHeader('Content-Length', file.length);
             res.setHeader('Content-Type', `video/${file.ext}`);
             const ranges = parseRange(file.length, req.headers.range, { combine: true });
+            console.log(ranges);
             if (ranges === -1) {
                 // 416 Requested Range Not Satisfiable
                 res.statusCode = 416;
