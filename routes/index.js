@@ -44,6 +44,30 @@ const getTorrentFile = new Promise(function (resolve, reject) {
     });
 });
 
+const getSubs = function(subtitles) {
+     return new Promise(function (resolve, reject) {
+         var fileEn = fs.createWriteStream("./public/sub/" + "big_hero_6" + ".en.srt");
+         var requestEn = https.get(subtitles.en.url, function (response) {
+             var srt = response.pipe(fileEn);
+             srt.on('finish', function () {
+                 fs.createReadStream('./public/sub/big_hero_6.en.srt')
+                     .pipe(srt2vtt())
+                     .pipe(fs.createWriteStream('./public/sub/big_hero_6.en.vtt'));
+             })
+         });
+         var fileFr = fs.createWriteStream("./public/sub/" + "big_hero_6" + ".fr.srt");
+         var requestFr = https.get(subtitles.fr.url, function (response) {
+             var srt = response.pipe(fileFr);
+             srt.on('finish', function () {
+                 fs.createReadStream('./public/sub/big_hero_6.fr.srt')
+                     .pipe(srt2vtt())
+                     .pipe(fs.createWriteStream('./public/sub/big_hero_6.fr.vtt'));
+             })
+         });
+         resolve("dowloaded");
+     });
+};
+
 router.get('*', function(req, res, next) {
     if (req.url != '/Guardians.of.the.Galaxy.2014.1080p.BluRay.x264.YIFY.mp4') {
         res.setHeader('Content-Type', 'text/html');
@@ -63,32 +87,14 @@ router.get('*', function(req, res, next) {
             imdbid: "tt2245084",   // Text-based query, this is not recommended.
             query: "big hero 6"
         }).then(subtitles => {
-                console.log(subtitles);
-                var fileEn = fs.createWriteStream("./public/videos/" + "big_hero_6" + ".en.srt");
-                var requestEn = https.get(subtitles.en.url, function (response) {
-                   var srt = response.pipe(fileEn);
-                   srt.on('finish', function () {
-                       fs.createReadStream('./public/videos/big_hero_6.en.srt')
-                           .pipe(srt2vtt())
-                           .pipe(fs.createWriteStream('./public/videos/big_hero_6.en.vtt'));
-                   })
-                });
-                var fileFr = fs.createWriteStream("./public/videos/" + "big_hero_6" + ".fr.srt");
-                var requestFr = https.get(subtitles.fr.url, function (response) {
-                    var srt = response.pipe(fileFr);
-                    srt.on('finish', function () {
-                        fs.createReadStream('./public/videos/big_hero_6.fr.srt')
-                            .pipe(srt2vtt())
-                            .pipe(fs.createWriteStream('./public/videos/big_hero_6.fr.vtt'));
-                    })
-                });
-
-                console.log("dowloading");
-
-                var rpath = __dirname + '/../views/index.jade';
-                fs.readFile(rpath, 'utf8', function (err, str) {
-                    var fn = jade.compile(str, {filename: rpath, pretty: true});
-                    res.end(fn({subFr: "./public/videos/big_hero_6.fr.vtt", subEn: "./public/videos/big_hero_6.en.vtt"}));
+                // console.log(subtitles);
+                getSubs(subtitles).then(function (str) {
+                    console.log(str);
+                    var rpath = __dirname + '/../views/index.jade';
+                    fs.readFile(rpath, 'utf8', function (err, str) {
+                        var fn = jade.compile(str, {filename: rpath, pretty: true});
+                        res.end(fn({subFr: "./public/sub/big_hero_6.fr.vtt", subEn: "./public/sub/big_hero_6.en.vtt"}));
+                    });
                 });
             })
         })
