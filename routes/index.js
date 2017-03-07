@@ -16,7 +16,7 @@ var torrentStream = require('torrent-stream');
 var pump = require('pump');
 var fs = require('fs');
 var jade = require('jade');
-var srt2vtt = require('srt-to-vtt');
+var srt2vtt = require('srt2vtt');
 
 const OS = require('opensubtitles-api');
 const OpenSubtitles = new OS({
@@ -50,18 +50,22 @@ const getSubs = function(subtitles) {
          var requestEn = https.get(subtitles.en.url, function (response) {
              var srt = response.pipe(fileEn);
              srt.on('finish', function () {
-                 fs.createReadStream('./public/sub/big_hero_6.en.srt')
-                     .pipe(srt2vtt())
-                     .pipe(fs.createWriteStream('./public/sub/big_hero_6.en.vtt'));
+                 var srtData = fs.readFileSync('./public/sub/big_hero_6.en.srt');
+                 srt2vtt(srtData, function(err, vttData) {
+                     if (err) throw new Error(err);
+                     fs.writeFileSync('./public/sub/big_hero_6.en.vtt', vttData);
+                 });
              })
          });
          var fileFr = fs.createWriteStream("./public/sub/" + "big_hero_6" + ".fr.srt");
          var requestFr = https.get(subtitles.fr.url, function (response) {
              var srt = response.pipe(fileFr);
              srt.on('finish', function () {
-                 fs.createReadStream('./public/sub/big_hero_6.fr.srt')
-                     .pipe(srt2vtt())
-                     .pipe(fs.createWriteStream('./public/sub/big_hero_6.fr.vtt'));
+                 var srtData = fs.readFileSync('./public/sub/big_hero_6.fr.srt');
+                 srt2vtt(srtData, function(err, vttData) {
+                     if (err) throw new Error(err);
+                     fs.writeFileSync('./public/sub/big_hero_6.fr.vtt', vttData);
+                 });
              })
          });
          resolve("dowloaded");
@@ -87,7 +91,7 @@ router.get('*', function(req, res, next) {
             imdbid: "tt2245084",   // Text-based query, this is not recommended.
             query: "big hero 6"
         }).then(subtitles => {
-                // console.log(subtitles);
+                console.log(subtitles);
                 getSubs(subtitles).then(function (str) {
                     console.log(str);
                     var rpath = __dirname + '/../views/index.jade';

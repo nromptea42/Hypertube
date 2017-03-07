@@ -9,7 +9,7 @@ h1 #{subFr}
 
 video.video-js.vjs-default-skin.vjs-big-play-centered(controls='', preload='auto', width="800px", height="600px", data-setup='{"autoplay": false}')
     source(src='http://localhost:8000/Guardians.of.the.Galaxy.2014.1080p.BluRay.x264.YIFY.mp4', type='video/mp4')
-    track(src="#{subEn}", label="English", kind="subtitles", srclang="en")
+    track(src="#{subEn}", label="English", kind="subtitles", srclang="en", default)
     track(src="#{subFr}", label="Francais", kind="subtitles", srclang="fr")
     p.vjs-no-js
         | To view this video please enable JavaScript, and consider upgrading to a web browser that
