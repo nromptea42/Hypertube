@@ -13,6 +13,7 @@
     "escape-html": "^1.0.3",
     "express": "~4.13.4",
     "express-handlebars": "^3.0.0",
+    "fluent-ffmpeg": "^2.1.0",
     "jade": "^1.11.0",
     "materialize-css": "^0.97.8",
     "mongodb": "^2.2.10",

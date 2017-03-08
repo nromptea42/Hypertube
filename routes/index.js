@@ -28,13 +28,14 @@ const OpenSubtitles = new OS({
 
 const path = require('path');
 const parseRange = require('range-parser');
-const engine = torrentStream('magnet:?xt=urn:btih:f0984f8dbf7ffeb64939339ed85bf49c18c24ed3&dn=Conan.2017.03.07.Malin.Akerman.HDTV.x264-CROOKS%5Bettv%5D&tr=http%3A%2F%2Ftracker.trackerfix.com%3A80%2Fannounce&tr=udp%3A%2F%2F9.rarbg.me%3A2710&tr=udp%3A%2F%2F9.rarbg.to%3A2710', {
+const engine = torrentStream('magnet:?xt=urn:btih:a9b2abfeb562408bf83ccb67fd848e65cdbdbd24&dn=Sand.Sharks.2011.720p.BluRay.H264.AAC-RARBG&tr=http%3A%2F%2Ftracker.trackerfix.com%3A80%2Fannounce&tr=udp%3A%2F%2F9.rarbg.me%3A2710&tr=udp%3A%2F%2F9.rarbg.to%3A2710', {
     tmp: '/Volumes/Storage/goinfre/nromptea',
     path: '/Volumes/Storage/goinfre/nromptea/film'
 });
 const getTorrentFile = new Promise(function (resolve, reject) {
     engine.on('ready', function() {
         engine.files.forEach(function (file, idx) {
+            console.log(file.length);
             const ext = path.extname(file.name).slice(1);
             if (ext === 'mkv' || ext === 'mp4') {
                 file.ext = ext;
@@ -46,29 +47,32 @@ const getTorrentFile = new Promise(function (resolve, reject) {
 
 const getSubs = function(subtitles) {
      return new Promise(function (resolve, reject) {
-         var fileEn = fs.createWriteStream("./public/sub/" + "big_hero_6" + ".en.srt");
-         var requestEn = https.get(subtitles.en.url, function (response) {
-             var srt = response.pipe(fileEn);
-             srt.on('finish', function () {
-                 var srtData = fs.readFileSync('./public/sub/big_hero_6.en.srt');
-                 srt2vtt(srtData, function(err, vttData) {
-                     if (err) throw new Error(err);
-                     fs.writeFileSync('./public/sub/big_hero_6.en.vtt', vttData);
-                 });
-             })
-         });
-         var fileFr = fs.createWriteStream("./public/sub/" + "big_hero_6" + ".fr.srt");
-         var requestFr = https.get(subtitles.fr.url, function (response) {
-             var srt = response.pipe(fileFr);
-             srt.on('finish', function () {
-                 var srtData = fs.readFileSync('./public/sub/big_hero_6.fr.srt');
-                 srt2vtt(srtData, function(err, vttData) {
-                     if (err) throw new Error(err);
-                     fs.writeFileSync('./public/sub/big_hero_6.fr.vtt', vttData);
-                 });
-             })
-         });
-         resolve("dowloaded");
+         if (subtitles.en != undefined) {
+             var fileEn = fs.createWriteStream("./public/sub/" + "big_hero_6" + ".en.srt");
+             var requestEn = https.get(subtitles.en.url, function (response) {
+                 var srt = response.pipe(fileEn);
+                 srt.on('finish', function () {
+                     var srtData = fs.readFileSync('./public/sub/big_hero_6.en.srt');
+                     srt2vtt(srtData, function (err, vttData) {
+                         if (err) throw new Error(err);
+                         fs.writeFileSync('./public/sub/big_hero_6.en.vtt', vttData);
+                     });
+                 })
+             });
+             var fileFr = fs.createWriteStream("./public/sub/" + "big_hero_6" + ".fr.srt");
+             var requestFr = https.get(subtitles.fr.url, function (response) {
+                 var srt = response.pipe(fileFr);
+                 srt.on('finish', function () {
+                     var srtData = fs.readFileSync('./public/sub/big_hero_6.fr.srt');
+                     srt2vtt(srtData, function (err, vttData) {
+                         if (err) throw new Error(err);
+                         fs.writeFileSync('./public/sub/big_hero_6.fr.vtt', vttData);
+                     });
+                 })
+             });
+             resolve("dowloaded");
+         }
+         resolve("no srt");
      });
 };
 
@@ -88,7 +92,7 @@ router.get('*', function(req, res, next) {
             extensions: 'srt', // Accepted extensions, defaults to 'srt'.
             limit: 'best',  // Can be 'best', 'all' or an
                             // arbitrary nb. Defaults to 'best'
-            imdbid: "tt2245084",   // Text-based query, this is not recommended.
+            imdbid: "tt02245088",   // Text-based query, this is not recommended.
             query: "big hero 6"
         }).then(subtitles => {
                 console.log(subtitles);
