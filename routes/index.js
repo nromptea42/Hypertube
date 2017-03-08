@@ -28,7 +28,7 @@ const OpenSubtitles = new OS({
 
 const path = require('path');
 const parseRange = require('range-parser');
-const engine = torrentStream('magnet:?xt=urn:btih:BB43CF1DC5B200BA37679DB96375A8190D933C2E&dn=Big+Hero+6+%282014%29+%5B720p%5D+%5BYTS.AG%5D&tr=udp%3A%2F%2Fglotorrents.pw%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A80&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969&tr=udp%3A%2F%2Fp4p.arenabg.ch%3A1337&tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337', {
+const engine = torrentStream('magnet:?xt=urn:btih:f0984f8dbf7ffeb64939339ed85bf49c18c24ed3&dn=Conan.2017.03.07.Malin.Akerman.HDTV.x264-CROOKS%5Bettv%5D&tr=http%3A%2F%2Ftracker.trackerfix.com%3A80%2Fannounce&tr=udp%3A%2F%2F9.rarbg.me%3A2710&tr=udp%3A%2F%2F9.rarbg.to%3A2710', {
     tmp: '/Volumes/Storage/goinfre/nromptea',
     path: '/Volumes/Storage/goinfre/nromptea/film'
 });
