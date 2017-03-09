@@ -43,6 +43,8 @@ app.use(function(req, res, next) {
     res.io = io;
     next();
 });
+var useragent = require('express-useragent');
+app.use(useragent.express());
 
 app.use('/', routes);
 
