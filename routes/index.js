@@ -32,16 +32,28 @@ const engine = torrentStream('magnet:?xt=urn:btih:a9b2abfeb562408bf83ccb67fd848e
     tmp: '/Volumes/Storage/goinfre/nromptea',
     path: '/Volumes/Storage/goinfre/nromptea/film'
 });
+// const engine = torrentStream('magnet:?xt=urn:btih:749E77BBFEBD97E689C132E3B663BB89425476DC&dn=Moana+%282016%29+%5B720p%5D+%5BYTS.AG%5D&tr=udp%3A%2F%2Fglotorrents.pw%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A80&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969&tr=udp%3A%2F%2Fp4p.arenabg.ch%3A1337&tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337', {
+//     tmp: '/Volumes/Storage/goinfre/nromptea',
+//     path: '/Volumes/Storage/goinfre/nromptea/film'
+// });
 const getTorrentFile = new Promise(function (resolve, reject) {
+    var tmp_len = 0;
+    var tmp_file = null;
     engine.on('ready', function() {
         engine.files.forEach(function (file, idx) {
             console.log(file.length);
             const ext = path.extname(file.name).slice(1);
             if (ext === 'mkv' || ext === 'mp4') {
-                file.ext = ext;
-                resolve(file);
+                if (file.length > tmp_len) {
+                    file.ext = ext;
+                    tmp_len = file.length;
+                    console.log("interieur du foreach");
+                    tmp_file = file;
+                }
             }
         });
+        console.log(tmp_file.length);
+        resolve(tmp_file);
     });
 });
 
@@ -112,6 +124,7 @@ router.get('*', function(req, res, next) {
     } else {
         res.setHeader('Accept-Ranges', 'bytes');
         getTorrentFile.then(function (file) {
+            console.log(file.length);
             res.setHeader('Content-Length', file.length);
             res.setHeader('Content-Type', `video/${file.ext}`);
             const ranges = parseRange(file.length, req.headers.range, { combine: true });
